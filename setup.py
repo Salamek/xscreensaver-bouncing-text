@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='xscreensaver-bouncing-text',
-    version='1.0.2',
+    version='1.0.3',
     packages=find_packages(exclude=['tests', 'tests.*']),
     package_data={'xscreensaver_bouncing_text': ['py.typed']},
     install_requires=[],
