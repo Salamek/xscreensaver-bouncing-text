@@ -40,6 +40,11 @@ setup(
         'tox',
         'pytest-cov'
     ],
+    entry_points={
+        'console_scripts': [
+            'xscreensaver-bouncing-text = xscreensaver_bouncing_text.__main__:main',
+        ],
+    },
     project_urls={
         'Release notes': 'https://github.com/Salamek/xscreensaver-bouncing-text/releases',
     },
