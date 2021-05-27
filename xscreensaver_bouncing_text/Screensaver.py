@@ -43,10 +43,21 @@ class BouncingText(pygame.sprite.Sprite):
 
 
 class Screensaver:
-    def __init__(self, text: str, full_screen: bool = False, show_fps: bool = False, background_color=(0, 0, 0)):
+    def __init__(self,
+                 text: str,
+                 full_screen: bool = False,
+                 show_fps: bool = False,
+                 text_color: str = '#4285F4',
+                 background_color: str = '#000000',
+                 speed: int = 1,
+                 fps: int = 60
+                 ):
         self.text = text
         self.show_fps = show_fps
-        self.background_color = background_color
+        self.background_color = pygame.Color(background_color)
+        self.text_color = pygame.Color(text_color)
+        self.speed = speed
+        self.fps = fps
         signal.signal(signal.SIGTERM, self.handle_term)
 
         window_id = os.environ.get('XSCREENSAVER_WINDOW')
@@ -81,11 +92,11 @@ class Screensaver:
         bouncing_text = BouncingText(
             self.text,
             pygame.font.Font(None, font_size),
-            pygame.Color('dodgerblue1')
+            self.text_color
         )
         all_sprites = pygame.sprite.Group(bouncing_text)
         position = [random.randint(bouncing_text.rect.width, self.width), random.randint(bouncing_text.rect.height, self.height)]
-        velocity = [1, 1]
+        velocity = [self.speed, self.speed]
 
         #time_event = pygame.USEREVENT + 1
         #pygame.time.set_timer(time_event, 1000)
@@ -116,7 +127,8 @@ class Screensaver:
             new_pos_x = position[0] - bouncing_text.rect.width
             new_pos_y = position[1] - bouncing_text.rect.height
 
-            bouncing_text.rect.update(new_pos_x, new_pos_y, bouncing_text.rect.width, bouncing_text.rect.height)
+            bouncing_text.rect.x = new_pos_x
+            bouncing_text.rect.y = new_pos_y
             # Update image if string contains % that ~means a strftime needs to be used
             if '%' in bouncing_text.text:
                 bouncing_text.update_image()
@@ -125,4 +137,4 @@ class Screensaver:
                 self.screen.blit(self.update_fps(), (10, 0))
             all_sprites.draw(self.screen)
             pygame.display.flip()
-            self.clock.tick(60)
+            self.clock.tick(self.fps)

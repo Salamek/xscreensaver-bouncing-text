@@ -6,14 +6,17 @@ Website: https://github.com/Salamek/xscreensaver-bouncing-text
 Command details:
     run                 Run the application.
 Usage:
-    chromium-kiosk [--text=TEXT] [--windowed] [--show_fps]
-    chromium-kiosk run [--text=TEXT] [--windowed] [--show_fps]
+    chromium-kiosk [--text=TEXT] [--windowed] [--show_fps] [--speed=SPEED] [--fps=FPS] [--text_color=TEXT_COLOR] [--background_color=BACKGROUND_COLOR]
+    chromium-kiosk run [--text=TEXT] [--windowed] [--show_fps] [--speed=SPEED] [--fps=FPS] [--text_color=TEXT_COLOR] [--background_color=BACKGROUND_COLOR]
     chromium-kiosk (-h | --help)
 Options:
-    --windowed               Run in window
-    --show_fps               Show FPS
-    -l DIR --log_dir=DIR        Directory to log into
-    --text=TEXT        Screensaver text
+    --windowed                                     Run in window
+    --show_fps                                     Show FPS
+    --text=TEXT                                    Screensaver text
+    --speed=SPEED                                  Screensaver speed [default: 1]
+    --fps=FPS                                      Screensaver FPS cap [default: 60]
+    --text_color=TEXT_COLOR                        Screensaver text color [default: #4285F4]
+    --background_color=BACKGROUND_COLOR            Screensaver background color [default: #000000]
 """
 
 import os
@@ -71,7 +74,15 @@ def run():
         return '{}\n%H:%M:%S'.format(os.uname().nodename)
 
     text = OPTIONS['--text'].replace('\\n', '\n') if OPTIONS['--text'] else get_default_text()
-    Screensaver(text, not OPTIONS['--windowed'], OPTIONS['--show_fps']).run()
+    Screensaver(
+        text,
+        not OPTIONS['--windowed'],
+        OPTIONS['--show_fps'],
+        speed=int(OPTIONS['--speed']),
+        fps=int(OPTIONS['--fps']),
+        text_color=OPTIONS['--text_color'],
+        background_color=OPTIONS['--background_color']
+    ).run()
 
 
 def main() -> None:
