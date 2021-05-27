@@ -88,6 +88,7 @@ class Screensaver:
     def run(self):
         # Font size is 10% of height of the screen
         font_size = int(self.height * 0.1)
+        has_strftime = '%' in self.text
 
         bouncing_text = BouncingText(
             self.text,
@@ -130,7 +131,7 @@ class Screensaver:
             bouncing_text.rect.x = new_pos_x
             bouncing_text.rect.y = new_pos_y
             # Update image if string contains % that ~means a strftime needs to be used
-            if '%' in bouncing_text.text:
+            if has_strftime:
                 bouncing_text.update_image()
             self.screen.fill(self.background_color)
             if self.show_fps:

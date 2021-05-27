@@ -11,7 +11,7 @@ Options:
     --show_fps                                     Show FPS
     --text=TEXT                                    Screensaver text, you can use newlines and strftime format to display datetime
     --speed=SPEED                                  Screensaver speed [default: 1]
-    --fps=FPS                                      Screensaver FPS cap [default: 60]
+    --fps=FPS                                      Screensaver FPS cap [default: 25]
     --text_color=TEXT_COLOR                        Screensaver text color [default: #4285F4]
     --background_color=BACKGROUND_COLOR            Screensaver background color [default: #000000]
 """
