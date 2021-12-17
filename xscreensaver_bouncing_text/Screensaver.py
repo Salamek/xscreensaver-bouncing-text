@@ -87,7 +87,7 @@ class Screensaver:
 
     def run(self):
         # Font size is 10% of height of the screen
-        font_size = int(self.height * 0.1)
+        font_size = int(self.height if self.height < self.width else self.width * 0.1)
         has_strftime = '%' in self.text
 
         bouncing_text = BouncingText(
@@ -96,7 +96,23 @@ class Screensaver:
             self.text_color
         )
         all_sprites = pygame.sprite.Group(bouncing_text)
-        position = [random.randint(bouncing_text.rect.width, self.width), random.randint(bouncing_text.rect.height, self.height)]
+
+        if self.width > bouncing_text.rect.width:
+            position_x = random.randint(bouncing_text.rect.width, self.width)
+        elif self.width < bouncing_text.rect.width:
+            position_x = random.randint(self.width, bouncing_text.rect.width)
+        else:
+            position_x = 0
+
+        if self.height > bouncing_text.rect.height:
+            position_y = random.randint(bouncing_text.rect.height, self.height)
+        elif self.height < bouncing_text.rect.height:
+            position_y = random.randint(self.height, bouncing_text.rect.height)
+        else:
+            position_y = 0
+
+        position = [position_x, position_y]
+        #position = [random.randint(bouncing_text.rect.width, self.width), random.randint(bouncing_text.rect.height, self.height)]
         velocity = [self.speed, self.speed]
 
         #time_event = pygame.USEREVENT + 1
