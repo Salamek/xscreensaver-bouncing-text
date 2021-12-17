@@ -12,7 +12,7 @@ if sys.version_info < (3, 0):
 
 setup(
     name='xscreensaver-bouncing-text',
-    version='1.0.7',
+    version='1.0.8',
     packages=find_packages(exclude=['tests', 'tests.*']),
     package_data={'xscreensaver_bouncing_text': ['py.typed']},
     install_requires=install_requires,
