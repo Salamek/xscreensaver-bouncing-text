@@ -87,7 +87,7 @@ class Screensaver:
 
     def run(self):
         # Font size is 10% of height of the screen
-        font_size = int(self.height if self.height < self.width else self.width * 0.1)
+        font_size = int(min(self.height, self.width) * 0.1)
         has_strftime = '%' in self.text
 
         bouncing_text = BouncingText(
