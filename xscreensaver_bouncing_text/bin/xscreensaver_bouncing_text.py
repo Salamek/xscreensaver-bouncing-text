@@ -4,16 +4,17 @@ This is xscreensaver-bouncing-text.
 License: GPL-3.0
 Website: https://github.com/Salamek/xscreensaver-bouncing-text
 Usage:
-    xscreensaver-bouncing-text [--text=TEXT] [--windowed] [--show_fps] [--speed=SPEED] [--fps=FPS] [--text_color=TEXT_COLOR] [--background_color=BACKGROUND_COLOR]
+    xscreensaver-bouncing-text [--text TEXT] [--windowed] [--show_fps] [--speed SPEED] [--fps FPS] [--text_color TEXT_COLOR] [--background_color BACKGROUND_COLOR] [-window-id WINDOW_ID]
     xscreensaver-bouncing-text (-h | --help)
 Options:
+    -window-id WINDOW_ID                           Screensaver ID of window to run in
     --windowed                                     Run in window
-    --show_fps                                     Show FPS
-    --text=TEXT                                    Screensaver text, you can use newlines and strftime format to display datetime
-    --speed=SPEED                                  Screensaver speed [default: 1]
-    --fps=FPS                                      Screensaver FPS cap [default: 25]
-    --text_color=TEXT_COLOR                        Screensaver text color [default: #4285F4]
-    --background_color=BACKGROUND_COLOR            Screensaver background color [default: #000000]
+    -f --show_fps                                     Show FPS
+    -t --text TEXT                                    Screensaver text, you can use newlines and strftime format to display datetime
+    -s --speed SPEED                                  Screensaver speed [default: 1]
+    -p --fps FPS                                      Screensaver FPS cap [default: 25]
+    -c --text_color TEXT_COLOR                        Screensaver text color [default: #4285F4]
+    -b --background_color BACKGROUND_COLOR            Screensaver background color [default: #000000]
 """
 
 import os
@@ -81,7 +82,8 @@ def run():
         speed=int(OPTIONS['--speed']),
         fps=int(OPTIONS['--fps']),
         text_color=OPTIONS['--text_color'],
-        background_color=OPTIONS['--background_color']
+        background_color=OPTIONS['--background_color'],
+        window_id=OPTIONS['WINDOW_ID']
     ).run()
 
 

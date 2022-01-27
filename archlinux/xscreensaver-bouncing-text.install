@@ -1,0 +1,45 @@
+## arg 1:  the new package version
+pre_install() {
+        :
+}
+
+## arg 1:  the new package version
+post_install() {
+      echo "Updating XScreenSaver config..."
+      if grep -R "xscreensaver-bouncing-text" /usr/share/X11/app-defaults/XScreenSaver
+      then
+          echo "Screensaver programs section already exists."
+      else
+          sed -i  '/gibson -root				    \\n\\/a\  GL:                           xscreensaver-bouncing-text                  \\n\\' /usr/share/X11/app-defaults/XScreenSaver
+      fi
+
+      if grep -R "hacks.xscreensaver-bouncing-text.name" /usr/share/X11/app-defaults/XScreenSaver
+      then
+          echo "Screensaver hacks section already exists."
+      else
+          sed -i  '/*hacks.xrayswarm.name:      XRaySwarm/a\*hacks.xscreensaver-bouncing-text.name:      Bouncing Text' /usr/share/X11/app-defaults/XScreenSaver
+      fi
+}
+
+## arg 1:  the new package version
+## arg 2:  the old package version
+pre_upgrade() {
+        :
+}
+
+## arg 1:  the new package version
+## arg 2:  the old package version
+post_upgrade() {
+    post_install()
+}
+
+## arg 1:  the old package version
+pre_remove() {
+        :
+}
+
+## arg 1:  the old package version
+post_remove() {
+    echo "Removing configuration from XScreenSaver config..."
+    sed -i '/xscreensaver-bouncing-text/d' /usr/share/X11/app-defaults/XScreenSaver
+}

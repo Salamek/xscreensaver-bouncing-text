@@ -1,0 +1,32 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+  abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+  configure)
+      # After install
+      echo "Updating XScreenSaver config..."
+      if grep -R "xscreensaver-bouncing-text" /usr/share/X11/app-defaults/XScreenSaver
+      then
+          echo "Screensaver programs section already exists."
+      else
+          sed -i  '/gibson -root				    \\n\\/a\  GL:                           xscreensaver-bouncing-text                  \\n\\' /usr/share/X11/app-defaults/XScreenSaver
+      fi
+
+      if grep -R "hacks.xscreensaver-bouncing-text.name" /usr/share/X11/app-defaults/XScreenSaver
+      then
+          echo "Screensaver hacks section already exists."
+      else
+          sed -i  '/*hacks.xrayswarm.name:      XRaySwarm/a\*hacks.xscreensaver-bouncing-text.name:      Bouncing Text' /usr/share/X11/app-defaults/XScreenSaver
+      fi
+    ;;
+
+  *)
+    echo "postinst called with unknown argument \`$1'" >&2
+    exit 1
+    ;;
+esac
+
+exit 0

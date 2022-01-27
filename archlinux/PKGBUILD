@@ -2,6 +2,7 @@ pkgname=xscreensaver-bouncing-text
 pkgver=1.0.11
 pkgdesc="Simple bouncing text screensaver for xscreensaver with UTF-8 support."
 pkgrel=1
+install=xscreensaver-bouncing-text.install
 arch=('any')
 license=('LGPL-3.0')
 url='https://github.com/Salamek/xscreensaver-bouncing-text'
@@ -10,6 +11,7 @@ depends=(
     'python'
     'python-pygame'
     'python-docopt'
+    'xscreensaver'
 )
 
 prepare() {

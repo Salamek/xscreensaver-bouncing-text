@@ -50,7 +50,8 @@ class Screensaver:
                  text_color: str = '#4285F4',
                  background_color: str = '#000000',
                  speed: int = 1,
-                 fps: int = 60
+                 fps: int = 60,
+                 window_id: str = None
                  ):
         self.text = text
         self.show_fps = show_fps
@@ -60,7 +61,7 @@ class Screensaver:
         self.fps = fps
         signal.signal(signal.SIGTERM, self.handle_term)
 
-        window_id = os.environ.get('XSCREENSAVER_WINDOW')
+        window_id = os.environ.get('XSCREENSAVER_WINDOW', window_id)
         if window_id:
             os.environ['SDL_WINDOWID'] = window_id
 
