@@ -2,9 +2,12 @@ import os
 import sys
 from setuptools import setup, find_packages
 
+share_dir = os.getenv("SHAREDIR", "/usr/share")
+
 
 def get_requirements(filename: str) -> list:
     return open(os.path.join(filename)).read().splitlines()
+
 
 install_requires = get_requirements('requirements.txt')
 if sys.version_info < (3, 0):
@@ -54,6 +57,11 @@ setup(
             'xscreensaver-bouncing-text = xscreensaver_bouncing_text.__main__:main',
         ],
     },
+    data_files=[
+        (os.path.join(share_dir, 'xscreensaver', 'config'), [
+            'usr/share/xscreensaver/config/xscreensaver-bouncing-text.xml'
+        ])
+    ],
     project_urls={
         'Release notes': 'https://github.com/Salamek/xscreensaver-bouncing-text/releases',
     },
