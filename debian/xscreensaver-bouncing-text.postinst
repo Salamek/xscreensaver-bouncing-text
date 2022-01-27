@@ -8,18 +8,18 @@ case "$1" in
   configure)
       # After install
       echo "Updating XScreenSaver config..."
-      if grep -R "xscreensaver-bouncing-text" /usr/share/X11/app-defaults/XScreenSaver
+      if grep -R "xscreensaver-bouncing-text" /etc/X11/app-defaults/XScreenSaver-gl
       then
           echo "Screensaver programs section already exists."
       else
-          sed -i  '/gibson -root				    \\n\\/a\  GL:                           xscreensaver-bouncing-text                  \\n\\' /usr/share/X11/app-defaults/XScreenSaver
+          sed -i  '/gibson -root				    \\n\\/a\  GL:                           xscreensaver-bouncing-text                  \\n\\' /etc/X11/app-defaults/XScreenSaver-gl
       fi
 
-      if grep -R "hacks.xscreensaver-bouncing-text.name" /usr/share/X11/app-defaults/XScreenSaver
+      if grep -R "hacks.xscreensaver-bouncing-text.name" /etc/X11/app-defaults/XScreenSaver-gl
       then
           echo "Screensaver hacks section already exists."
       else
-          sed -i  '/*hacks.xrayswarm.name:      XRaySwarm/a\*hacks.xscreensaver-bouncing-text.name:      Bouncing Text' /usr/share/X11/app-defaults/XScreenSaver
+          sed -i  '/*hacks.xrayswarm.name:      XRaySwarm/a\*hacks.xscreensaver-bouncing-text.name:      Bouncing Text' /etc/X11/app-defaults/XScreenSaver-gl
       fi
     ;;
 

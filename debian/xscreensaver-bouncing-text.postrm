@@ -8,7 +8,7 @@ case "$1" in
   remove|purge)
       # After install
       echo "Removing configuration from XScreenSaver config..."
-      sed -i '/xscreensaver-bouncing-text/d' /usr/share/X11/app-defaults/XScreenSaver
+      sed -i '/xscreensaver-bouncing-text/d' /etc/X11/app-defaults/XScreenSaver-gl
     ;;
 
   *)
