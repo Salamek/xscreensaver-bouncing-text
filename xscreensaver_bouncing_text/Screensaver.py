@@ -3,6 +3,8 @@ import signal
 import datetime
 import os
 import sys
+import time
+from typing import Callable
 
 # Disable stupid pygame message on import
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
@@ -11,12 +13,12 @@ import pygame
 
 class BouncingText(pygame.sprite.Sprite):
 
-    def __init__(self, text: str,  font, color):
+    def __init__(self, text_callable: Callable,  font, color):
         super(BouncingText, self).__init__()
         self.rect = pygame.Rect((1, 1), (1, 1))
         self.font = font
         self.color = color
-        self.text = text
+        self.text_callable = text_callable
 
         self.update_image()
 
@@ -24,7 +26,7 @@ class BouncingText(pygame.sprite.Sprite):
         height = self.font.get_height()
         # Put the rendered text surfaces into this list.
 
-        text_to_drawn = datetime.datetime.now().strftime(self.text).splitlines()
+        text_to_drawn = self.text_callable().splitlines()
 
         text_surfaces = []
         for txt in text_to_drawn:
@@ -44,7 +46,8 @@ class BouncingText(pygame.sprite.Sprite):
 
 class Screensaver:
     def __init__(self,
-                 text: str,
+                 text_callable: Callable,
+                 callable_refresh_rate_ms: int = 0,
                  full_screen: bool = False,
                  show_fps: bool = False,
                  text_color: str = '#4285F4',
@@ -53,7 +56,8 @@ class Screensaver:
                  fps: int = 60,
                  window_id: str = None
                  ):
-        self.text = text
+        self.text_callable = text_callable
+        self.callable_refresh_rate_ms = callable_refresh_rate_ms
         self.show_fps = show_fps
         self.background_color = pygame.Color(background_color)
         self.text_color = pygame.Color(text_color)
@@ -89,10 +93,9 @@ class Screensaver:
     def run(self):
         # Font size is 10% of height of the screen
         font_size = int(min(self.height, self.width) * 0.1)
-        has_strftime = '%' in self.text
 
         bouncing_text = BouncingText(
-            self.text,
+            self.text_callable,
             pygame.font.Font(None, font_size),
             self.text_color
         )
@@ -118,7 +121,7 @@ class Screensaver:
 
         #time_event = pygame.USEREVENT + 1
         #pygame.time.set_timer(time_event, 1000)
-
+        last_text_refresh = None
         while True:
 
             # Events
@@ -147,9 +150,16 @@ class Screensaver:
 
             bouncing_text.rect.x = new_pos_x
             bouncing_text.rect.y = new_pos_y
-            # Update image if string contains % that ~means a strftime needs to be used
-            if has_strftime:
+            # Update image if text refresh rate is seth, otherwise just update once
+            if last_text_refresh and self.callable_refresh_rate_ms > 0:
+                time_passed = time.perf_counter_ns() - last_text_refresh
+                time_passed_ms = time_passed // 1000000
+            else:
+                time_passed_ms = 0
+            if not last_text_refresh or time_passed_ms > self.callable_refresh_rate_ms:
+                last_text_refresh = time.perf_counter_ns()
                 bouncing_text.update_image()
+
             self.screen.fill(self.background_color)
             if self.show_fps:
                 self.screen.blit(self.update_fps(), (10, 0))

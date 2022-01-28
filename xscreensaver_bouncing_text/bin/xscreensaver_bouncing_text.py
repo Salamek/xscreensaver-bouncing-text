@@ -20,6 +20,10 @@ Options:
 import os
 import signal
 import sys
+import shutil
+import subprocess
+import datetime
+from typing import Tuple, Callable
 from functools import wraps
 from xscreensaver_bouncing_text.Screensaver import Screensaver
 
@@ -71,12 +75,42 @@ def command(default: bool = False):
 
 @command(default=True)
 def run():
-    def get_default_text() -> str:
-        return '{}\n%H:%M:%S'.format(os.uname().nodename)
+    def _get_default_text_mode() -> Tuple[Callable, int]:
+        def _get_default_text() -> str:
+            found_xscreensaver_text_path = shutil.which('xscreensaver-text')
+            if found_xscreensaver_text_path:
+                return subprocess.check_output(found_xscreensaver_text_path)
 
-    text = OPTIONS['--text'].replace('\\n', '\n') if OPTIONS['--text'] else get_default_text()
+            return '{}\n%H:%M:%S'.format(os.uname().nodename)
+
+        def _default_text_callable() -> str:
+            default_text = _get_default_text()
+            if '%' in default_text:
+                return datetime.datetime.now().strftime(default_text)
+
+            return default_text
+
+        return _default_text_callable, 100 if '%' in _get_default_text() else 0
+
+    def _get_command_line_text_mode() -> Tuple[Callable, int]:
+        command_line_text = OPTIONS['--text'].replace('\\n', '\n')
+
+        def _command_line_text_callable():
+            return datetime.datetime.now().strftime(command_line_text)
+
+        return _command_line_text_callable, 100 if '%' in command_line_text else 0
+
+    mode_list = {
+        'command_line_text': _get_command_line_text_mode,
+    }
+
+    selected_mode = 'command_line_text' if OPTIONS['--text'] else None
+
+    text_callable, callable_refresh_rate_ms = mode_list.get(selected_mode, _get_default_text_mode)()
+
     Screensaver(
-        text,
+        text_callable,
+        callable_refresh_rate_ms,
         not OPTIONS['--windowed'],
         OPTIONS['--show_fps'],
         speed=int(OPTIONS['--speed']),
