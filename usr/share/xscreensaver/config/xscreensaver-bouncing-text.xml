@@ -17,8 +17,8 @@
 
             <boolean id="show_fps" _label="Show frame rate" arg-set="-f"/>
 
-            <string id="text_color" _label="Text color" arg="-c %"/>
-            <string id="background_color" _label="Background color" arg="-b %"/>
+            <string id="text_color" _label="Text color" arg="-c %" default="#4285F4" />
+            <string id="background_color" _label="Background color" arg="-b %" default="#000000" />
         </vgroup>
     </hgroup>
     <hgroup>
