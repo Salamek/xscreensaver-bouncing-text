@@ -75,9 +75,9 @@ class Screensaver:
 
         info_object = pygame.display.Info()
         self.clock = pygame.time.Clock()
-        self.width = info_object.current_w
-        self.height = info_object.current_h
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN) if full_screen else pygame.display.set_mode((self.width, self.height))
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN) if full_screen else pygame.display.set_mode((info_object.current_w, info_object.current_h))
+
+        self.width, self.height = self.screen.get_size()
 
         self.fps_font = pygame.font.Font(None, 40)
 
