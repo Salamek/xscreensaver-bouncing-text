@@ -76,8 +76,9 @@ def command(default: bool = False):
 @command(default=True)
 def run():
     def _get_default_text_mode() -> Tuple[Callable, int]:
+        found_xscreensaver_text_path = shutil.which('xscreensaver-text')
+
         def _get_default_text() -> str:
-            found_xscreensaver_text_path = shutil.which('xscreensaver-text')
             if found_xscreensaver_text_path:
                 return subprocess.check_output(found_xscreensaver_text_path).decode('UTF-8')
 
@@ -90,7 +91,13 @@ def run():
 
             return default_text
 
-        return _default_text_callable, 100 if '%' in _get_default_text() else 0
+        pool_rate = 0
+        if found_xscreensaver_text_path:
+            pool_rate = 1010
+        elif '%' in _get_default_text():
+            pool_rate = 100
+
+        return _default_text_callable, pool_rate
 
     def _get_command_line_text_mode() -> Tuple[Callable, int]:
         command_line_text = OPTIONS['--text'].replace('\\n', '\n')
