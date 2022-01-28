@@ -1,9 +1,7 @@
 import random
 import signal
-import datetime
 import os
 import sys
-import time
 from typing import Callable
 
 # Disable stupid pygame message on import
@@ -116,21 +114,19 @@ class Screensaver:
             position_y = 0
 
         position = [position_x, position_y]
-        #position = [random.randint(bouncing_text.rect.width, self.width), random.randint(bouncing_text.rect.height, self.height)]
         velocity = [self.speed, self.speed]
 
-        #time_event = pygame.USEREVENT + 1
-        #pygame.time.set_timer(time_event, 1000)
-        last_text_refresh = None
+        time_event = pygame.USEREVENT + 1
+        pygame.time.set_timer(time_event, self.callable_refresh_rate_ms)
+        update_image = True
         while True:
 
             # Events
-            #update_image = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.handle_term()
-                #elif event.type == time_event:
-                #    update_image = True
+                elif event.type == time_event:
+                    update_image = True
 
             keys = pygame.key.get_pressed()
             if keys[pygame.K_ESCAPE]:
@@ -150,15 +146,10 @@ class Screensaver:
 
             bouncing_text.rect.x = new_pos_x
             bouncing_text.rect.y = new_pos_y
-            # Update image if text refresh rate is seth, otherwise just update once
-            if last_text_refresh and self.callable_refresh_rate_ms > 0:
-                time_passed = time.perf_counter_ns() - last_text_refresh
-                time_passed_ms = time_passed // 1000000
-            else:
-                time_passed_ms = 0
-            if not last_text_refresh or time_passed_ms > self.callable_refresh_rate_ms:
-                last_text_refresh = time.perf_counter_ns()
+
+            if update_image:
                 bouncing_text.update_image()
+                update_image = False
 
             self.screen.fill(self.background_color)
             if self.show_fps:
