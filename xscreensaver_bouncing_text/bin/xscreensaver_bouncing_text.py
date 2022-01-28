@@ -79,7 +79,7 @@ def run():
         def _get_default_text() -> str:
             found_xscreensaver_text_path = shutil.which('xscreensaver-text')
             if found_xscreensaver_text_path:
-                return subprocess.check_output(found_xscreensaver_text_path)
+                return subprocess.check_output(found_xscreensaver_text_path).decode('UTF-8')
 
             return '{}\n%H:%M:%S'.format(os.uname().nodename)
 
