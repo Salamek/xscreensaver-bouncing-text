@@ -10,7 +10,7 @@ post_install() {
       then
           echo "Screensaver programs section already exists."
       else
-          sed -i  '/gibson -root				    \\n\\/a\  GL:                           xscreensaver-bouncing-text                  \\n\\' /usr/share/X11/app-defaults/XScreenSaver
+          sed -i  '/gibson -root				    \\n\\/a\  GL:                           xscreensaver-bouncing-text -c #4285F4 -b #000000                 \\n\\' /usr/share/X11/app-defaults/XScreenSaver
       fi
 
       if grep -q -R "hacks.xscreensaver-bouncing-text.name" /usr/share/X11/app-defaults/XScreenSaver
