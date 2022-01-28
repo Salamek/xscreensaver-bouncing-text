@@ -6,14 +6,14 @@ pre_install() {
 ## arg 1:  the new package version
 post_install() {
       echo "Updating XScreenSaver config..."
-      if grep -R "xscreensaver-bouncing-text" /usr/share/X11/app-defaults/XScreenSaver
+      if grep -q -R "GL:                           xscreensaver-bouncing-text" /usr/share/X11/app-defaults/XScreenSaver
       then
           echo "Screensaver programs section already exists."
       else
           sed -i  '/gibson -root				    \\n\\/a\  GL:                           xscreensaver-bouncing-text                  \\n\\' /usr/share/X11/app-defaults/XScreenSaver
       fi
 
-      if grep -R "hacks.xscreensaver-bouncing-text.name" /usr/share/X11/app-defaults/XScreenSaver
+      if grep -q -R "hacks.xscreensaver-bouncing-text.name" /usr/share/X11/app-defaults/XScreenSaver
       then
           echo "Screensaver hacks section already exists."
       else
